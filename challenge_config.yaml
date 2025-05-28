@@ -92,11 +92,11 @@ challenge_phases:
 
 dataset_splits:
   - id: 1
-    name: VG-RS Split
-    codename: vgrs_split
+    name: Train Split
+    codename: train_split
   - id: 2
-    name: VQA-SA Split
-    codename: vqasa_split
+    name: Test Split
+    codename: test_split
   - id: 3
     name: VR-Ads Split
     codename: vrads_split
