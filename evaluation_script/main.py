@@ -203,7 +203,7 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
                 if iou >= 0.5:
                     accum_acc += 1
             else:
-                output["result"] = [{"train_split": {"ACC": NAN}}]
+                output["result"] = [{"test_split": {"ACC": NAN}}]
                 output["submission_result"] = output["result"][0]
                 return output
         accum_acc = accum_acc / len(test_data)
@@ -248,7 +248,7 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
                     "image": item["image_path"]
                 })
             else:
-                output["result"] = [{"train_split": {"ACC": NAN}}]
+                output["result"] = [{"test_split": {"ACC": NAN}}]
                 output["submission_result"] = output["result"][0]
                 return output
                 
