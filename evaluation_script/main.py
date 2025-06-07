@@ -232,6 +232,7 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
         # 创建临时数据结构
         temp_data = []
         counters = {'true_counter': 0, 'count': 0}
+        i=0
         # 遍历result_new_data中的每个条目
         for item in result_new_data:
             key = (item["image_path"], item["question"])
@@ -247,6 +248,7 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
                     "label": label,
                     "image": item["image_path"]
                 })
+                i+=1
             else:
                 output["result"] = [{"test_split": {"ACC": NAN}}]
                 output["submission_result"] = output["result"][0]
@@ -257,14 +259,15 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
             process_line,
             counter_dict=counters
         )
-        with ThreadPoolExecutor(max_workers=180) as executor:  # 根据API限制调整线程数
+        with ThreadPoolExecutor(max_workers=1) as executor:  # 根据API限制调整线程数
             executor.map(task_func, temp_data)
         
         output["result"] = [
             {
                 "test_split": {
-                    "ACC1":str(counter_dict['true_counter'])
-                    "ACC2":str(counter_dict['count'])
+                    "ACC1":str(counters['true_counter']),
+                    "ACC2":str(counters['count']),
+                    "ACC3":i,
                     # "ACC": counters['true_counter'] / counters['count'] if counters['count'] else 0,
                 }
             },
