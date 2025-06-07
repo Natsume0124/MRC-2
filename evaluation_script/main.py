@@ -110,6 +110,7 @@ def process_line(data,counter_dict):
     # 线程安全写入
     with lock:
         # 更新计数器
+        counter_dict['result'].append(is_true)
         if "1" == str(is_true):
             counter_dict['true_counter'] += 1
         counter_dict['count'] += 1
@@ -236,8 +237,8 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
     
         # 创建临时数据结构
         temp_data = []
-        counters = {'true_counter': 0, 'count': 0}
-        i=0
+        result =[]
+        counters = {'true_counter': 0, 'count': 0,'result': result}
         # 遍历result_new_data中的每个条目
         for item in result_new_data:
             key = (item["image_path"], item["question"])
@@ -253,7 +254,6 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
                     "label": label,
                     "image": item["image_path"]
                 })
-                i+=1
             else:
                 output["result"] = [{"test_split": {"ACC": NAN}}]
                 output["submission_result"] = output["result"][0]
@@ -272,7 +272,7 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
                 "test_split": {
                     "ACC1":str(counters['true_counter']),
                     "ACC2":str(counters['count']),
-                    "ACC3":i,
+                    "ACC3":str(counters['result']),
                     # "ACC": counters['true_counter'] / counters['count'] if counters['count'] else 0,
                 }
             },
