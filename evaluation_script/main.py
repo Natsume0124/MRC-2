@@ -2,6 +2,7 @@ import random
 import json
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
+from collections import Counter
 from threading import Lock
 import requests
 import os
@@ -70,6 +71,22 @@ def call_zhipuai_api(api_key, model, messages, temperature=0.0, max_tokens=1024)
     except requests.exceptions.RequestException as e:
         return f"❌ 请求失败: {str(e)}"
 
+
+def find_most_frequent(result):
+    if not result:  # 处理空列表情况
+        return None
+    
+    # 使用Counter统计频率
+    counter = Counter(result)
+    
+    # 找出最高频率值
+    max_freq = max(counter.values())
+    
+    # 找到第一个出现最高频率的元素
+    for item in result:
+        if counter[item] == max_freq:
+            return item
+
 def process_line(data,counter_dict):
     question = data['question']
     
@@ -83,7 +100,7 @@ def process_line(data,counter_dict):
         print("正在调用智谱AI API...")
         # result =[]
         # for i in range(5):
-        is_true = call_zhipuai_api(API_KEY_vqa, MODEL_vqa, messages)
+        is_true = call_zhipuai_api(API_KEY, MODEL, messages)
         # result.append(is_true)
         # is_true = find_most_frequent(result)
         print(f"API返回: {is_true}")
@@ -92,21 +109,9 @@ def process_line(data,counter_dict):
         is_true = "0"
     # 线程安全写入
     with lock:
-        content = {
-            "question": question,
-            "predict": data["predict"],
-            "label": data["label"],
-            "is_true": is_true,
-            "image":data["images"] if "images" in data.keys() else '',
-        }
-        with open(OUTPUT_PATH, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(content, ensure_ascii=False) + '\n')
-        
         # 更新计数器
         if "1" == str(is_true):
             counter_dict['true_counter'] += 1
-        else:
-            print(f"错误的预测: {data['predict']}，正确答案: {data['label']},istrue: {is_true},image: {data['image']},question: {data['question']}")
         counter_dict['count'] += 1
         
 def compute_iou(box1, box2):
@@ -259,7 +264,7 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
             process_line,
             counter_dict=counters
         )
-        with ThreadPoolExecutor(max_workers=1) as executor:  # 根据API限制调整线程数
+        with ThreadPoolExecutor(max_workers=5) as executor:  # 根据API限制调整线程数
             executor.map(task_func, temp_data)
         
         output["result"] = [
