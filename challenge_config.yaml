@@ -40,14 +40,14 @@ challenge_phases:
     is_submission_public: True
     start_date: 2025-05-01 00:00:00
     end_date: 2025-06-15 23:59:59
-    test_annotation_file: annotations/test_annotations_devsplit.json
-    codename: dev
+    test_annotation_file: annotations/VG_RS_testsplit.json
+    codename: VG-RS
     max_submissions_per_day: 5000
     max_submissions_per_month: 5000
     max_submissions: 5000
-    is_restricted_to_select_one_submission: False
+    is_restricted_to_select_one_submission: True
     is_partial_submission_evaluation_enabled: False
-    allowed_submission_file_types: ".json, .zip, .txt, .tsv, .gz, .csv, .h5, .npy, .npz"
+    allowed_submission_file_types: ".json"
   - id: 2
     name: VQA-SA
     description: templates/challenge_phase_2_description.html
@@ -61,13 +61,14 @@ challenge_phases:
     is_submission_public: True
     start_date: 2025-05-01 00:00:00
     end_date: 2025-06-15 23:59:59
-    test_annotation_file: annotations/test_annotations_testsplit.json
-    codename: test
+    test_annotation_file: annotations/VQA_SA_testsplit.json
+    codename: VQA-SA
     max_submissions_per_day: 5000
     max_submissions_per_month: 5000
     max_submissions: 5000
-    is_restricted_to_select_one_submission: False
+    is_restricted_to_select_one_submission: True
     is_partial_submission_evaluation_enabled: False
+    allowed_submission_file_types: ".json"
   - id: 3
     name: VR-Ads
     description: templates/challenge_phase_3_description.html
@@ -81,25 +82,25 @@ challenge_phases:
     is_submission_public: True
     start_date: 2025-05-01 00:00:00
     end_date: 2025-06-15 23:59:59
-    test_annotation_file: annotations/test_annotations_testsplit.json
+    test_annotation_file: annotations/VR_Ads_testsplit.json
     codename: VR-Ads
     max_submissions_per_day: 5000
     max_submissions_per_month: 5000
     max_submissions: 50000
-    is_restricted_to_select_one_submission: False
+    is_restricted_to_select_one_submission: True
     is_partial_submission_evaluation_enabled: False
-    allowed_submission_file_types: ".json, .zip, .txt, .tsv, .gz, .csv, .h5, .npy, .npz"
+    allowed_submission_file_types: ".json"
 
 dataset_splits:
+  # - id: 1
+  #   name: Train Split
+  #   codename: train_split
   - id: 1
-    name: Train Split
-    codename: train_split
-  - id: 2
     name: Test Split
     codename: test_split
-  - id: 3
-    name: VR-Ads Split
-    codename: vrads_split
+  # - id: 3
+  #   name: VR-Ads Split
+  #   codename: vrads_split
     
 
 challenge_phase_splits:
@@ -113,15 +114,15 @@ challenge_phase_splits:
     show_leaderboard_by_latest_submission: True
   - challenge_phase_id: 2
     leaderboard_id: 1
-    dataset_split_id: 2
+    dataset_split_id: 1
     visibility: 3
     leaderboard_decimal_precision: 2
     is_leaderboard_order_descending: True
-    showeceution_time: False
-    show_leaderboard_by_latest_submission: False
+    showeceution_time: True
+    show_leaderboard_by_latest_submission: True
   - challenge_phase_id: 3
     leaderboard_id: 1
-    dataset_split_id: 3
+    dataset_split_id: 1
     visibility: 3
     leaderboard_decimal_precision: 2
     is_leaderboard_order_descending: True
