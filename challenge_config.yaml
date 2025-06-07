@@ -45,7 +45,7 @@ challenge_phases:
     max_submissions_per_day: 5000
     max_submissions_per_month: 5000
     max_submissions: 5000
-    is_restricted_to_select_one_submission: True
+    is_restricted_to_select_one_submission: False
     is_partial_submission_evaluation_enabled: False
     allowed_submission_file_types: ".json"
   - id: 2
@@ -66,7 +66,7 @@ challenge_phases:
     max_submissions_per_day: 5000
     max_submissions_per_month: 5000
     max_submissions: 5000
-    is_restricted_to_select_one_submission: True
+    is_restricted_to_select_one_submission: False
     is_partial_submission_evaluation_enabled: False
     allowed_submission_file_types: ".json"
   - id: 3
@@ -87,7 +87,7 @@ challenge_phases:
     max_submissions_per_day: 5000
     max_submissions_per_month: 5000
     max_submissions: 50000
-    is_restricted_to_select_one_submission: True
+    is_restricted_to_select_one_submission: False
     is_partial_submission_evaluation_enabled: False
     allowed_submission_file_types: ".json"
 
