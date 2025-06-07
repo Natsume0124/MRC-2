@@ -6,8 +6,8 @@ from threading import Lock
 import requests
 import os
 lock = Lock()
-API_KEY = "0c9745f6e0254f41818839057a62025b.EZ6Cq8FgHRPo91fk"
-MODEL = "glm-4-flash"  # 可用的模型: glm-3-turbo, glm-4, characterglm
+API_KEY_vqa = "0c9745f6e0254f41818839057a62025b.EZ6Cq8FgHRPo91fk"
+MODEL_vqa = "glm-4-flash"  # 可用的模型: glm-3-turbo, glm-4, characterglm
 def call_zhipuai_api(api_key, model, messages, temperature=0.0, max_tokens=1024):
     """
     调用智谱AI API (最新版本)
@@ -83,7 +83,7 @@ def process_line(data,counter_dict):
         print("正在调用智谱AI API...")
         # result =[]
         # for i in range(5):
-        is_true = call_zhipuai_api(API_KEY, MODEL, messages)
+        is_true = call_zhipuai_api(API_KEY_vqa, MODEL_vqa, messages)
         # result.append(is_true)
         # is_true = find_most_frequent(result)
         print(f"API返回: {is_true}")
@@ -103,7 +103,7 @@ def process_line(data,counter_dict):
             f.write(json.dumps(content, ensure_ascii=False) + '\n')
         
         # 更新计数器
-        if "1" in str(is_true):
+        if "1" == str(is_true):
             counter_dict['true_counter'] += 1
         else:
             print(f"错误的预测: {data['predict']}，正确答案: {data['label']},istrue: {is_true},image: {data['image']},question: {data['question']}")
@@ -263,7 +263,9 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
         output["result"] = [
             {
                 "test_split": {
-                    "ACC": counters['true_counter'] / counters['count'] if counters['count'] else 0,
+                    "ACC1":str(counter_dict['true_counter'])
+                    "ACC2":str(counter_dict['count'])
+                    # "ACC": counters['true_counter'] / counters['count'] if counters['count'] else 0,
                 }
             },
         ]
