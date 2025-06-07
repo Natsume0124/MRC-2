@@ -89,7 +89,8 @@ def find_most_frequent(result):
 
 def process_line(data,counter_dict):
     question = data['question']
-    
+    API_KEY = "0c9745f6e0254f41818839057a62025b.EZ6Cq8FgHRPo91fk"
+    MODEL = "glm-4-flash"  # 可用的模型: glm-3-turbo, glm-4, characterglm
     # 构造请求
     try:
         # 创建对话
@@ -110,7 +111,6 @@ def process_line(data,counter_dict):
     # 线程安全写入
     with lock:
         # 更新计数器
-        counter_dict['result'].append(is_true)
         if "1" == str(is_true):
             counter_dict['true_counter'] += 1
         counter_dict['count'] += 1
@@ -238,7 +238,7 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
         # 创建临时数据结构
         temp_data = []
         result =[]
-        counters = {'true_counter': 0, 'count': 0,'result': result}
+        counters = {'true_counter': 0, 'count': 0}
         # 遍历result_new_data中的每个条目
         for item in result_new_data:
             key = (item["image_path"], item["question"])
@@ -264,16 +264,13 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
             process_line,
             counter_dict=counters
         )
-        with ThreadPoolExecutor(max_workers=5) as executor:  # 根据API限制调整线程数
+        with ThreadPoolExecutor(max_workers=4) as executor:  # 根据API限制调整线程数
             executor.map(task_func, temp_data)
         
         output["result"] = [
             {
                 "test_split": {
-                    "ACC1":str(counters['true_counter']),
-                    "ACC2":str(counters['count']),
-                    "ACC3":str(counters['result']),
-                    # "ACC": counters['true_counter'] / counters['count'] if counters['count'] else 0,
+                    "ACC": counters['true_counter'] / counters['count'] if counters['count'] else 0,
                 }
             },
         ]
