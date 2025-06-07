@@ -7,8 +7,7 @@ from threading import Lock
 import requests
 import os
 lock = Lock()
-API_KEY = "0c9745f6e0254f41818839057a62025b.EZ6Cq8FgHRPo91fk"
-MODEL = "glm-4-flash"  # 可用的模型: glm-3-turbo, glm-4, characterglm
+
 def call_zhipuai_api(api_key, model, messages, temperature=0.0, max_tokens=1024):
     """
     调用智谱AI API (最新版本)
